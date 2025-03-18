@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>库存查看</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    /* 标题样式，字体增大，间距调整为与chuangkou1.html窗口管理一致 */
+    h1 {
+      text-align: center;
+      font-size: 32px; /* 与窗口管理一致 */
+      margin: 0 0 10vh 0;
+    }
+    /* 返回按钮区域 */
+    .back-button-container {
+      width: 60%;
+      margin: 0 auto 10px;
+      text-align: left;
+    }
+    /* 返回按钮增大尺寸 */
+    .back-button {
+      padding: 6px 12px;       /* 增加内边距 */
+      font-size: 16px;         /* 增加字体大小 */
+      border: none;
+      border-radius: 5px;
+      background: #808080;     /* 灰色背景 */
+      color: #fff;
+      cursor: pointer;
+    }
+    /* 控制区（搜索、排序、刷新、批量入库） */
+    .controls {
+      width: 60%;
+      margin: 0 auto 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+    .left-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    /* 搜索框样式 */
+    .search-box {
+      display: inline-flex;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+    .search-box .search-icon {
+      margin-right: 5px;
+      font-size: 12px;
+    }
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 12px;
+    }
+    .left-controls select {
+      padding: 3px 5px;
+      font-size: 12px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .right-controls button {
+      padding: 3px 7px;
+      font-size: 12px;
+      border: none;
+      border-radius: 5px;
+      background: #3498db;
+      color: #fff;
+      cursor: pointer;
+    }
+    .right-controls button:hover {
+      background: #2980b9;
+    }
+    /* 表格容器 */
+    .table-container {
+      width: 60%;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table th, table td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ddd;
+      font-size: 12px;
+    }
+    table th {
+      background-color: #f2f2f2;
+    }
+    /* 分页控件 */
+    .pagination {
+      width: 60%;
+      margin: 10px auto 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+    }
+    .pagination select,
+    .pagination input {
+      padding: 3px;
+      font-size: 12px;
+    }
+    .pagination button {
+      padding: 3px 7px;
+      font-size: 12px;
+      cursor: pointer;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+    .pagination button:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>库存查看</h1>
+
+  <!-- 返回按钮区域 -->
+  <div class="back-button-container">
+    <button class="back-button" onclick="history.back();">返回</button>
+  </div>
+
+  <!-- 搜索、排序、刷新、批量入库控件区域 -->
+  <div class="controls">
+    <div class="left-controls">
+      <!-- 搜索框 -->
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="序号/商品名称/价格">
+      </div>
+      <!-- 排序下拉框 -->
+      <select id="sortSelect">
+        <option value="default">默认排序（按入库时间）</option>
+        <option value="name">名称排序</option>
+        <option value="priceAsc">价格排序（升序）</option>
+        <option value="priceDesc">价格排序（降序）</option>
+        <option value="stock">数量排序（剩余数量）</option>
+      </select>
+    </div>
+    <!-- 右侧控件 -->
+    <div class="right-controls">
+      <button id="batchBtn">批量入库</button>
+      <button id="refreshBtn">刷新</button>
+    </div>
+  </div>
+
+  <!-- 表格容器 -->
+  <div class="table-container">
+    <table id="inventory-table">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>商品名称</th>
+          <th>规格</th>
+          <th>零售价格</th>
+          <th>库存</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 表格数据由 JavaScript 动态生成 -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 分页控件 -->
+  <div class="pagination">
+    <span>每页显示</span>
+    <select id="pageSize">
+      <option value="10" selected>10条</option>
+      <option value="50">50条</option>
+      <option value="100">100条</option>
+    </select>
+    <span>当前页: <span id="currentPage">1</span> / <span id="totalPages">?</span></span>
+    <button id="prevPage">上一页</button>
+    <button id="nextPage">下一页</button>
+    <span>跳转到</span>
+    <input type="number" id="jumpPage" min="1" style="width:50px;">
+    <button id="jumpBtn">跳转</button>
+  </div>
+
+  <script>
+    // 模拟生成100条示例数据，操作列增加两个按钮：详情和入库
+    var data = [];
+    for (var i = 1; i <= 100; i++) {
+      data.push({
+        id: i,
+        name: "商品" + i,
+        spec: "规格" + i,
+        price: (10 + i).toFixed(2),
+        stock: Math.floor(Math.random() * 100),
+        operation: '<button onclick="alert(\'详情商品' + i + '\')">详情</button> ' +
+                   '<button onclick="alert(\'入库商品' + i + '\')">入库</button>',
+        inDate: i // 用作入库时间排序的依据
+      });
+    }
+
+    var filteredData = data.slice();
+    var currentPage = 1;
+    var pageSize = parseInt(document.getElementById("pageSize").value);
+    var totalPages = Math.ceil(filteredData.length / pageSize);
+
+    function renderTable() {
+      var tbody = document.getElementById("inventory-table").getElementsByTagName("tbody")[0];
+      tbody.innerHTML = "";
+      var start = (currentPage - 1) * pageSize;
+      var end = Math.min(start + pageSize, filteredData.length);
+      for (var i = start; i < end; i++) {
+        var row = filteredData[i];
+        var tr = document.createElement("tr");
+        tr.innerHTML = "<td>" + row.id + "</td>" +
+                       "<td>" + row.name + "</td>" +
+                       "<td>" + row.spec + "</td>" +
+                       "<td>" + row.price + "</td>" +
+                       "<td>" + row.stock + "</td>" +
+                       "<td>" + row.operation + "</td>";
+        tbody.appendChild(tr);
+      }
+      document.getElementById("currentPage").innerText = currentPage;
+      totalPages = Math.ceil(filteredData.length / pageSize);
+      document.getElementById("totalPages").innerText = totalPages;
+    }
+
+    function updateFilterAndSort() {
+      var query = document.getElementById("searchInput").value.trim().toLowerCase();
+      filteredData = data.filter(function(row) {
+        return !query ||
+          row.id.toString().includes(query) ||
+          row.name.toLowerCase().includes(query) ||
+          row.price.toString().includes(query);
+      });
+
+      var sortOption = document.getElementById("sortSelect").value;
+      if (sortOption === "default") {
+        filteredData.sort(function(a, b) {
+          return a.inDate - b.inDate;
+        });
+      } else if (sortOption === "name") {
+        filteredData.sort(function(a, b) {
+          return a.name.localeCompare(b.name);
+        });
+      } else if (sortOption === "priceAsc") {
+        filteredData.sort(function(a, b) {
+          return parseFloat(a.price) - parseFloat(b.price);
+        });
+      } else if (sortOption === "priceDesc") {
+        filteredData.sort(function(a, b) {
+          return parseFloat(b.price) - parseFloat(a.price);
+        });
+      } else if (sortOption === "stock") {
+        filteredData.sort(function(a, b) {
+          return a.stock - b.stock;
+        });
+      }
+      currentPage = 1;
+      renderTable();
+    }
+
+    // 分页控件事件
+    document.getElementById("prevPage").addEventListener("click", function() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+    document.getElementById("nextPage").addEventListener("click", function() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+      }
+    });
+    document.getElementById("jumpBtn").addEventListener("click", function() {
+      var jump = parseInt(document.getElementById("jumpPage").value);
+      if (jump >= 1 && jump <= totalPages) {
+        currentPage = jump;
+        renderTable();
+      } else {
+        alert("请输入有效页码！");
+      }
+    });
+    document.getElementById("pageSize").addEventListener("change", function() {
+      pageSize = parseInt(this.value);
+      currentPage = 1;
+      renderTable();
+    });
+
+    // 搜索、排序、刷新控件事件
+    document.getElementById("searchInput").addEventListener("input", updateFilterAndSort);
+    // 添加回车键检索功能
+    document.getElementById("searchInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter" || e.keyCode === 13) {
+        updateFilterAndSort();
+        e.preventDefault();
+      }
+    });
+    document.getElementById("sortSelect").addEventListener("change", updateFilterAndSort);
+    document.getElementById("refreshBtn").addEventListener("click", updateFilterAndSort);
+
+    // 批量入库按钮事件
+    document.getElementById("batchBtn").addEventListener("click", function() {
+      alert("批量入库操作");
+    });
+
+    // 初始渲染
+    updateFilterAndSort();
+  </script>
+</body>
+</html>

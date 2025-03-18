@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录页面</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      position: relative; /* 使绝对定位的元素以 body 为参照 */
+    }
+    /* 左上角的 logo */
+    .top-left {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    .top-left img {
+      width: 100px; /* 根据需要调整大小 */
+      height: auto;
+    }
+    /* 页面整体布局，采用 Grid 分为三行 */
+    body {
+      display: grid;
+      grid-template-rows: 1fr auto 1fr;
+    }
+    /* 上半部分区域：显示大图片 */
+    .top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .top img {
+      width: 25vw;       /* 占视口宽度的 25% */
+      max-width: 400px;  /* 限制最大宽度 */
+      height: auto;
+    }
+    /* 中间区域：登录框居中 */
+    .middle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+    .login-container h2 {
+      margin-bottom: 20px;
+    }
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 80%;
+      padding: 10px;
+      margin: 10px auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: block;
+      text-align: left;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: #3498db;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .login-container button:hover {
+      background: #2980b9;
+    }
+    #error-message {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- 左上角的 logo -->
+  <div class="top-left">
+    <img src="Dexpo.png" alt="Dexpo Logo">
+  </div>
+
+  <!-- 上半部分区域，显示大图片 -->
+  <div class="top">
+    <img src="hongdazl.png" alt="Logo">
+  </div>
+
+  <!-- 中间区域：登录框居中 -->
+  <div class="middle">
+    <div class="login-container">
+      <h2>登录</h2>
+      <form id="login-form">
+        <input type="text" id="username" name="username" placeholder="用户名" required>
+        <input type="password" id="password" name="password" placeholder="密码" required>
+        <button type="submit">登录</button>
+      </form>
+      <div id="error-message">用户名或密码错误</div>
+    </div>
+  </div>
+
+  <!-- 下半部分区域，可留空 -->
+  <div class="bottom"></div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault(); // 阻止表单默认提交
+      var username = document.getElementById('username').value.trim();
+      var password = document.getElementById('password').value.trim();
+
+      // 预设的账号及密码
+      var accounts = {
+        "cangku": "111111",
+        "chuangkou1": "000000",
+        "chuangkou2": "000000",
+        "chuangkou3": "000000",
+        "chuangkou4": "000000",
+        "chuangkou5": "000000",
+        "chuangkou6": "000000",
+        "chuangkou7": "000000",
+        "chuangkou8": "000000",
+        "chuangkou9": "000000"
+      };
+
+      // 校验账号和密码
+      if (accounts[username] && accounts[username] === password) {
+        // 登录成功后跳转到对应的 HTML 文件（例如 cangku.html 或 chuangkou1.html）
+        window.location.href = username + ".html";
+      } else {
+        // 显示错误提示信息
+        document.getElementById('error-message').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

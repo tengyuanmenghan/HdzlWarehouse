@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>窗口管理 - 窗口1</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    /* 顶部标题 */
+    .header {
+      text-align: center;
+      margin-top: 20px;
+    }
+    /* 功能按钮区域 */
+    .functionality-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 33vh;  /* 占整个页面高度的1/3 */
+      gap: 40px;    /* 按钮之间的间距，可自行调整 */
+    }
+    .functionality-container button {
+      padding: 20px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #3498db;
+      color: #fff;
+      transition: background 0.3s;
+    }
+    .functionality-container button:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <!-- 顶部标题：窗口管理 -->
+  <div class="header">
+    <h1>窗口管理</h1>
+  </div>
+  <!-- 功能按钮区域，左右排列 -->
+  <div class="functionality-container">
+    <button onclick="location.href='order.html'">开单</button>
+    <button onclick="location.href='kucun1.html'">查看库存</button>
+    <button onclick="location.href='other.html'">其他选项</button>
+  </div>
+</body>
+</html>
