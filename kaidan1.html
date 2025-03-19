@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>开单 - 窗口1</title>
+  <style>
+    /* 通用样式 */
+    body {
+      background: #f0f0f0;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      width: 60%;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    label {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background: #3498db;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+
+    /* 响应式样式 */
+    @media screen and (max-width: 768px) {
+      .container {
+        width: 90%;
+        padding: 15px;
+      }
+      h1 {
+        font-size: 28px;
+      }
+      label, input, select, textarea, button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>开单</h1>
+    <form id="orderForm">
+      <div>
+        <label for="customerName">客户名称：</label>
+        <input type="text" id="customerName" name="customerName" placeholder="请输入客户名称" required>
+      </div>
+      <div>
+        <label for="orderDate">订单日期：</label>
+        <input type="date" id="orderDate" name="orderDate" required>
+      </div>
+      <div>
+        <label for="product">商品名称：</label>
+        <input type="text" id="product" name="product" placeholder="请输入商品名称" required>
+      </div>
+      <div>
+        <label for="quantity">数量：</label>
+        <input type="number" id="quantity" name="quantity" placeholder="请输入数量" required>
+      </div>
+      <div>
+        <label for="unitPrice">单价：</label>
+        <input type="number" id="unitPrice" name="unitPrice" placeholder="请输入单价" required>
+      </div>
+      <div>
+        <label for="remarks">备注：</label>
+        <textarea id="remarks" name="remarks" rows="4" placeholder="请输入备注信息"></textarea>
+      </div>
+      <button type="submit">提交订单</button>
+    </form>
+  </div>
+  <script>
+    // 模拟订单提交。实际项目中可用 AJAX 将数据提交给后台。
+    document.getElementById("orderForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("订单已提交！");
+    });
+  </script>
+</body>
+</html>
