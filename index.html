@@ -3,563 +3,145 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>库存查看</title>
+  <title>登录页面</title>
   <style>
-    body {
-      background: #f0f0f0;
-      font-family: Arial, sans-serif;
+    html, body {
       margin: 0;
-      padding: 20px;
-    }
-    /* 标题样式 */
-    h1 {
-      text-align: center;
-      font-size: 32px; /* 与窗口管理一致 */
-      margin: 0 0 10vh 0;
-    }
-    /* 返回按钮区域 */
-    .back-button-container {
-      width: 60%;
-      margin: 0 auto 10px;
-      text-align: left;
-    }
-    .back-button {
-      padding: 6px 12px;       /* 增加内边距 */
-      font-size: 16px;         /* 增加字体大小 */
-      border: none;
-      border-radius: 5px;
-      background: #808080;     /* 灰色背景 */
-      color: #fff;
-      cursor: pointer;
-    }
-    /* 控制区（搜索、排序、刷新、批量修改、添加商品） */
-    .controls {
-      width: 60%;
-      margin: 0 auto 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-    }
-    .left-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .search-box {
-      display: inline-flex;
-      align-items: center;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 3px 5px;
-    }
-    .search-box .search-icon {
-      margin-right: 5px;
-      font-size: 12px;
-    }
-    .search-box input {
-      border: none;
-      background: transparent;
-      outline: none;
-      font-size: 12px;
-    }
-    .left-controls select {
-      padding: 3px 5px;
-      font-size: 12px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .right-controls button {
-      padding: 3px 7px;
-      font-size: 12px;
-      border: none;
-      border-radius: 5px;
-      background: #3498db;
-      color: #fff;
-      cursor: pointer;
-      margin-left: 5px;
-    }
-    .right-controls button:hover {
-      background: #2980b9;
-    }
-    /* 表格容器 */
-    .table-container {
-      width: 60%;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    table th, table td {
-      padding: 10px;
-      text-align: center;
-      border: 1px solid #ddd;
-      font-size: 12px;
-    }
-    table th {
-      background-color: #f2f2f2;
-    }
-    /* 分页控件 */
-    .pagination {
-      width: 60%;
-      margin: 10px auto 0;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 5px;
-      font-size: 12px;
-    }
-    .pagination select,
-    .pagination input {
-      padding: 3px;
-      font-size: 12px;
-    }
-    .pagination button {
-      padding: 3px 7px;
-      font-size: 12px;
-      cursor: pointer;
-      background: #3498db;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-    }
-    .pagination button:hover {
-      background: #2980b9;
-    }
-    /* 模态窗口：添加商品 */
-    #addModal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
+      padding: 0;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1100;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      position: relative; /* 使绝对定位的元素以 body 为参照 */
+    }
+    /* 右上角的 logo */
+    .top-right {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .top-right img {
+      width: 100px; /* 根据需要调整大小 */
+      height: auto;
+    }
+    /* 页面整体布局，采用 Grid 分为三行 */
+    body {
+      display: grid;
+      grid-template-rows: 1fr auto 1fr;
+    }
+    /* 上半部分区域：显示大图片 */
+    .top {
+      display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
     }
-    #addModal .modal-content {
-      background: #fff;
-      width: 80%;
-      max-width: 500px;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    .top img {
+      width: 25vw;       /* 占视口宽度的 25% */
+      max-width: 400px;  /* 限制最大宽度 */
+      height: auto;
     }
-    #addModal .modal-header {
+    /* 中间区域：登录框居中 */
+    .middle {
       display: flex;
+      justify-content: center;
       align-items: center;
-      margin-bottom: 10px;
     }
-    #addModal .modal-back-btn {
-      background: #3498db;
-      border: none;
-      border-radius: 5px;
-      color: #fff;
-      padding: 5px 10px;
-      font-size: 14px;
-      cursor: pointer;
-      margin-right: 10px;
+    .login-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
     }
-    #addModal h2 {
-      font-size: 20px;
-      margin: 0;
+    .login-container h2 {
+      margin-bottom: 20px;
     }
-    #addModal form div {
-      margin-bottom: 10px;
-    }
-    #addModal form label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-    #addModal form input {
-      width: 100%;
-      padding: 8px;
-      font-size: 14px;
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 80%;
+      padding: 10px;
+      margin: 10px auto;
       border: 1px solid #ccc;
       border-radius: 5px;
+      display: block;
+      text-align: left;
     }
-    #addModal .confirm-add-btn {
+    .login-container button {
       width: 100%;
       padding: 10px;
-      font-size: 16px;
       border: none;
-      border-radius: 5px;
-      background: #808080;
+      background: #3498db;
       color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
       cursor: pointer;
-      margin-top: 10px;
     }
-    #addModal .confirm-add-btn:hover {
-      background: #666666;
+    .login-container button:hover {
+      background: #2980b9;
+    }
+    #error-message {
+      color: red;
+      margin-top: 10px;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>库存查看</h1>
-
-  <!-- 返回按钮区域 -->
-  <div class="back-button-container">
-    <button class="back-button" onclick="history.back();">返回</button>
+  <!-- 右上角的 logo -->
+  <div class="top-left">
+    <img src="Dexpo.png" alt="Dexpo Logo">
   </div>
 
-  <!-- 搜索、排序、刷新、批量修改、添加商品控件区域 -->
-  <div class="controls">
-    <div class="left-controls">
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="序号/商品名称/价格">
-      </div>
-      <select id="sortSelect">
-        <option value="default">默认</option>
-        <option value="name">名称</option>
-        <option value="priceAsc">价格（升序）</option>
-        <option value="priceDesc">价格（降序）</option>
-        <option value="stock">数量</option>
-      </select>
-    </div>
-    <div class="right-controls">
-      <button id="addProductBtn">添加商品</button>
-      <button id="batchBtn">批量修改</button>
-      <button id="refreshBtn">刷新</button>
-    </div>
+  <!-- 上半部分区域，显示大图片 -->
+  <div class="top">
+    <img src="HongdaZl.png" alt="Logo">
   </div>
 
-  <!-- 表格容器 -->
-  <div class="table-container">
-    <table id="inventory-table">
-      <thead>
-        <tr>
-          <th>序号</th>
-          <th>商品名称</th>
-          <th>规格</th>
-          <th>零售价格</th>
-          <th>库存</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- 表格数据由 JavaScript 动态生成 -->
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 分页控件 -->
-  <div class="pagination">
-    <span>每页显示</span>
-    <select id="pageSize">
-      <option value="10" selected>10条</option>
-      <option value="50">50条</option>
-      <option value="100">100条</option>
-    </select>
-    <span>当前页: <span id="currentPage">1</span> / <span id="totalPages">?</span></span>
-    <button id="prevPage">上一页</button>
-    <button id="nextPage">下一页</button>
-    <span>跳转到</span>
-    <input type="number" id="jumpPage" min="1" style="width:50px;">
-    <button id="jumpBtn">跳转</button>
-  </div>
-
-  <!-- 模态窗口：添加商品 -->
-  <div id="addModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button class="modal-back-btn" onclick="closeAddModal()">返回</button>
-        <h2>添加商品</h2>
-      </div>
-      <form id="addProductForm">
-        <div>
-          <label for="newBarcode">商品条码：</label>
-          <input type="text" id="newBarcode" required>
-        </div>
-        <div>
-          <label for="newName">商品名称：</label>
-          <input type="text" id="newName" required>
-        </div>
-        <div>
-          <label for="newUnit">商品单位：</label>
-          <input type="text" id="newUnit" required>
-        </div>
-        <div>
-          <label for="newSpec">商品规格：</label>
-          <input type="text" id="newSpec" required>
-        </div>
-        <div>
-          <label for="newPrice">售价：</label>
-          <input type="number" id="newPrice" step="0.01" required>
-        </div>
-        <div>
-          <label for="newImage">商品图片（URL）：</label>
-          <input type="text" id="newImage">
-        </div>
-        <button type="button" class="confirm-add-btn" onclick="addNewProduct()">确认添加</button>
+  <!-- 中间区域：登录框居中 -->
+  <div class="middle">
+    <div class="login-container">
+      <h2>登录</h2>
+      <form id="login-form">
+        <input type="text" id="username" name="username" placeholder="用户名" required>
+        <input type="password" id="password" name="password" placeholder="密码" required>
+        <button type="submit">登录</button>
       </form>
+      <div id="error-message">用户名或密码错误</div>
     </div>
   </div>
+
+  <!-- 下半部分区域，可留空 -->
+  <div class="bottom"></div>
 
   <script>
-    // 初始状态，不含任何商品
-    var data = [];
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault(); // 阻止表单默认提交
+      var username = document.getElementById('username').value.trim();
+      var password = document.getElementById('password').value.trim();
 
-    // 渲染库存表格
-    function renderTable() {
-      var tbody = document.getElementById("inventory-table").getElementsByTagName("tbody")[0];
-      tbody.innerHTML = "";
-      var start = (currentPage - 1) * pageSize;
-      var end = Math.min(start + pageSize, filteredData.length);
-      for (var i = start; i < end; i++) {
-        var row = filteredData[i];
-        var tr = document.createElement("tr");
-        tr.innerHTML = "<td>" + row.id + "</td>" +
-                       "<td>" + row.name + "</td>" +
-                       "<td>" + row.spec + "</td>" +
-                       "<td>" + row.price + "</td>" +
-                       "<td>" + row.stock + "</td>" +
-                       "<td>" + row.operation + "</td>";
-        tbody.appendChild(tr);
-      }
-      document.getElementById("currentPage").innerText = currentPage;
-      totalPages = Math.ceil(filteredData.length / pageSize);
-      document.getElementById("totalPages").innerText = totalPages;
-    }
-
-    function updateFilterAndSort() {
-      var query = document.getElementById("searchInput").value.trim().toLowerCase();
-      filteredData = data.filter(function(row) {
-        return !query ||
-          row.id.toString().includes(query) ||
-          row.name.toLowerCase().includes(query) ||
-          row.price.toString().includes(query);
-      });
-
-      var sortOption = document.getElementById("sortSelect").value;
-      if (sortOption === "default") {
-        filteredData.sort(function(a, b) {
-          return a.inDate - b.inDate;
-        });
-      } else if (sortOption === "name") {
-        filteredData.sort(function(a, b) {
-          return a.name.localeCompare(b.name);
-        });
-      } else if (sortOption === "priceAsc") {
-        filteredData.sort(function(a, b) {
-          return parseFloat(a.price) - parseFloat(b.price);
-        });
-      } else if (sortOption === "priceDesc") {
-        filteredData.sort(function(a, b) {
-          return parseFloat(b.price) - parseFloat(a.price);
-        });
-      } else if (sortOption === "stock") {
-        filteredData.sort(function(a, b) {
-          return a.stock - b.stock;
-        });
-      }
-      currentPage = 1;
-      renderTable();
-    }
-
-    var filteredData = data.slice();
-    var currentPage = 1;
-    var pageSize = parseInt(document.getElementById("pageSize").value);
-    var totalPages = Math.ceil(filteredData.length / pageSize);
-
-    // 分页控件事件
-    document.getElementById("prevPage").addEventListener("click", function() {
-      if (currentPage > 1) {
-        currentPage--;
-        renderTable();
-      }
-    });
-    document.getElementById("nextPage").addEventListener("click", function() {
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderTable();
-      }
-    });
-    document.getElementById("jumpBtn").addEventListener("click", function() {
-      var jump = parseInt(document.getElementById("jumpPage").value);
-      if (jump >= 1 && jump <= totalPages) {
-        currentPage = jump;
-        renderTable();
-      } else {
-        alert("请输入有效页码！");
-      }
-    });
-    document.getElementById("pageSize").addEventListener("change", function() {
-      pageSize = parseInt(this.value);
-      currentPage = 1;
-      renderTable();
-    });
-
-    // 搜索、排序、刷新控件事件
-    document.getElementById("searchInput").addEventListener("input", updateFilterAndSort);
-    document.getElementById("searchInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter" || e.keyCode === 13) {
-        updateFilterAndSort();
-        e.preventDefault();
-      }
-    });
-    document.getElementById("sortSelect").addEventListener("change", updateFilterAndSort);
-    document.getElementById("refreshBtn").addEventListener("click", updateFilterAndSort);
-
-    // 批量修改按钮事件
-    document.getElementById("batchBtn").addEventListener("click", function() {
-      alert("批量修改操作");
-    });
-
-    // 添加商品按钮事件：打开添加商品模态窗口
-    document.getElementById("addProductBtn").addEventListener("click", function() {
-      openAddModal();
-    });
-
-    // 打开添加商品模态窗口
-    function openAddModal() {
-      document.getElementById("addModal").style.display = "flex";
-    }
-    // 关闭添加商品模态窗口
-    function closeAddModal() {
-      document.getElementById("addModal").style.display = "none";
-    }
-    // 确认添加：读取表单数据，添加到 data 数组，并更新表格
-    function addNewProduct() {
-      var barcode = document.getElementById("newBarcode").value.trim();
-      var name = document.getElementById("newName").value.trim();
-      var unit = document.getElementById("newUnit").value.trim();
-      var spec = document.getElementById("newSpec").value.trim();
-      var price = document.getElementById("newPrice").value.trim();
-      var image = document.getElementById("newImage").value.trim();
-      if (!barcode || !name || !unit || !spec || !price) {
-        alert("请填写所有必填项！");
-        return;
-      }
-      // 新商品ID，简单使用 data 长度+1
-      var newId = data.length + 1;
-      var newProduct = {
-        id: newId,
-        barcode: barcode,
-        name: name,
-        unit: unit,
-        spec: spec,
-        price: parseFloat(price).toFixed(2),
-        stock: 0,  // 库存默认为0
-        operation: '<button onclick="alert(\'详情商品' + newId + '\')">详情</button> ' +
-                   '<button onclick="alert(\'修改商品' + newId + '\')">修改</button>',
-        inDate: newId  // 用作排序依据
+      // 预设的账号及密码
+      var accounts = {
+        "cangku": "111111",
+        "chuangkou1": "000000",
+        "chuangkou2": "000000",
+        "chuangkou3": "000000",
+        "chuangkou4": "000000",
+        "chuangkou5": "000000",
+        "chuangkou6": "000000",
+        "chuangkou7": "000000",
+        "chuangkou8": "000000",
+        "chuangkou9": "000000"
       };
-      data.push(newProduct);
-      updateFilterAndSort();
-      closeAddModal();
-      document.getElementById("addProductForm").reset();
-      alert("商品已添加到库存中，库存数量默认为0");
-    }
 
-    // 添加商品到已选择商品列表，数量使用 input 可修改
-    function addProductToList(product) {
-      var existing = document.querySelector("#productList [data-id='" + product.id + "']");
-      if (existing) return;
-
-      var productList = document.getElementById("productList");
-      var productRow = document.createElement("div");
-      productRow.className = "product-row";
-      productRow.setAttribute("data-id", product.id);
-      productRow.innerHTML =
-        "<div class='product-image'><img src='placeholder.jpg' alt='商品图片'></div>" +
-        "<div class='product-info'>" +
-          "<p class='product-name'>" + product.name + "</p>" +
-          "<p class='product-price'>单价：￥" + product.price + "</p>" +
-          "<p class='product-total'>总价：￥" + product.price + "</p>" +
-        "</div>" +
-        "<div class='product-qty-delete'>" +
-          "<input type='number' class='product-qty' value='1' min='1' onchange='updateProductTotal(this, " + product.price + ")'>" +
-          "<img src='shanchu.jpg' alt='删除' class='delete-icon' onclick='deleteProduct(this)'>" +
-        "</div>";
-      productList.appendChild(productRow);
-    }
-
-    function updateProductTotal(inputElem, unitPrice) {
-      var qty = parseFloat(inputElem.value) || 0;
-      var productRow = inputElem.closest(".product-row");
-      var totalElem = productRow.querySelector(".product-total");
-      var total = unitPrice * qty;
-      totalElem.textContent = "总价：￥" + total.toFixed(2);
-      updateTotals();
-    }
-
-    function updateTotals() {
-      let totalQty = 0;
-      let totalAmount = 0;
-      let productRows = document.querySelectorAll("#container2 .product-row");
-      productRows.forEach(function(row) {
-        let qtyInput = row.querySelector(".product-qty");
-        let qty = parseFloat(qtyInput.value) || 0;
-        totalQty += qty;
-        let totalText = row.querySelector(".product-total").textContent;
-        let amount = parseFloat(totalText.replace(/[^0-9\.]/g, '')) || 0;
-        totalAmount += amount;
-      });
-      document.getElementById("totalQty").textContent = totalQty;
-      document.getElementById("totalAmount").textContent = "￥" + totalAmount.toFixed(2);
-    }
-
-    function deleteProduct(deleteIcon) {
-      var productRow = deleteIcon.parentElement.parentElement;
-      productRow.parentElement.removeChild(productRow);
-      updateTotals();
-      alert("已删除该商品");
-    }
-
-    document.getElementById("submitOrder").addEventListener("click", function() {
-      alert("订单已提交！");
+      // 校验账号和密码
+      if (accounts[username] && accounts[username] === password) {
+        // 登录成功后跳转到对应的 HTML 文件（例如 cangku.html 或 chuangkou1.html）
+        window.location.href = username + ".html";
+      } else {
+        // 显示错误提示信息
+        document.getElementById('error-message').style.display = 'block';
+      }
     });
-
-    // 初始渲染
-    updateFilterAndSort();
   </script>
-
-  <!-- 模态窗口：添加商品 -->
-  <div id="addModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button class="modal-back-btn" onclick="closeAddModal()">返回</button>
-        <h2>添加商品</h2>
-      </div>
-      <form id="addProductForm">
-        <div>
-          <label for="newBarcode">商品条码：</label>
-          <input type="text" id="newBarcode" required>
-        </div>
-        <div>
-          <label for="newName">商品名称：</label>
-          <input type="text" id="newName" required>
-        </div>
-        <div>
-          <label for="newUnit">商品单位：</label>
-          <input type="text" id="newUnit" required>
-        </div>
-        <div>
-          <label for="newSpec">商品规格：</label>
-          <input type="text" id="newSpec" required>
-        </div>
-        <div>
-          <label for="newPrice">售价：</label>
-          <input type="number" id="newPrice" step="0.01" required>
-        </div>
-        <div>
-          <label for="newImage">商品图片（URL）：</label>
-          <input type="text" id="newImage">
-        </div>
-        <button type="button" class="confirm-add-btn" onclick="addNewProduct()">确认添加</button>
-      </form>
-    </div>
-  </div>
 </body>
 </html>
