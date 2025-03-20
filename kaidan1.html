@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>开单 - 窗口1</title>
+  <title>销售开单</title>
   <style>
     /* 通用样式 */
     body {
@@ -12,37 +12,217 @@
       margin: 0;
       padding: 20px;
     }
-    .container {
-      width: 60%;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
+    /* 大标题 */
     h1 {
       text-align: center;
       font-size: 32px;
       margin-bottom: 20px;
     }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+    /* 通用 container 样式，电脑端宽度60%，手机端90% */
+    .container {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      width: 60%;
     }
-    label {
+    @media screen and (max-width: 768px) {
+      .container {
+        width: 90%;
+      }
+    }
+    /* Container 1：客户名称、开单日期、扫码/选择商品 */
+    #container1 .row {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    #container1 label {
+      display: block;
       font-size: 16px;
       margin-bottom: 5px;
     }
-    input, select, textarea {
-      width: 100%;
+    #container1 input[type="text"],
+    #container1 input[type="date"] {
+      width: 80%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 0 auto;
+      display: block;
+    }
+    /* 新增扫码与选择商品区域：两个独立 container 并排 */
+    .scan-choose-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 15px;
+    }
+    .scan-container {
+      width: 45%;
+      text-align: center;
+      cursor: pointer;
+    }
+    .scan-container img {
+      width: 25%;  /* 缩小到原来的1/4 */
+      height: auto;
+      display: block;
+      margin: 0 auto 5px;
+    }
+    .scan-container p {
+      font-size: 16px;
+      margin: 0;
+    }
+    /* Container 2：已选择商品 */
+    #container2 .header {
+      background: #e0e0e0;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    #container2 .product-list { }
+    #container2 .product-row {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    #container2 .product-row:last-child {
+      border-bottom: none;
+    }
+    #container2 .product-image img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    #container2 .product-info {
+      flex: 1;
+      padding: 0 10px;
+    }
+    #container2 .product-info p {
+      margin: 2px 0;
+      font-size: 14px;
+    }
+    #container2 .product-qty-delete {
+      text-align: right;
+    }
+    /* 数量使用输入框，方便修改 */
+    #container2 .product-qty-delete input {
+      width: 50px;
+      font-size: 14px;
+      padding: 2px;
+      text-align: center;
+    }
+    #container2 .product-qty-delete .delete-icon {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    /* Container 3：总计与备注 */
+    #container3 .summary {
+      text-align: right;
+    }
+    #container3 .summary p {
+      font-size: 16px;
+      margin: 5px 0;
+    }
+    #container3 .remarks {
+      text-align: center;
+      margin: 15px 0;
+    }
+    #container3 .remarks label {
+      font-size: 16px;
+      margin-bottom: 5px;
+      display: block;
+    }
+    #container3 .remarks textarea {
+      width: 80%;
+      display: block;
+      margin: 0 auto;
       padding: 10px;
       font-size: 14px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-    button {
-      padding: 10px 20px;
+    #container3 button {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 5px;
+      background: #3498db;
+      color: #fff;
+      cursor: pointer;
+    }
+    #container3 button:hover {
+      background: #2980b9;
+    }
+    /* 模态窗口：选择商品 */
+    #selectModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    #selectModal .modal-content {
+      background: #fff;
+      width: 80%;
+      max-width: 800px;
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 70%;
+      overflow-y: auto;
+    }
+    /* 模态窗口头部：返回按钮与标题 */
+    #selectModal .modal-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    #selectModal .modal-back-btn {
+      background: #3498db;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    #selectModal h2 {
+      font-size: 20px;
+      margin: 0;
+    }
+    #selectModal table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #selectModal th, #selectModal td {
+      padding: 8px;
+      text-align: center;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+    #selectModal th {
+      background: #f2f2f2;
+    }
+    /* 将确认选择按钮放在模态窗口框外 */
+    #selectModal .confirm-btn {
+      width: 80%;
+      max-width: 800px;
+      padding: 10px;
       font-size: 16px;
       border: none;
       border-radius: 5px;
@@ -51,60 +231,212 @@
       cursor: pointer;
       margin-top: 10px;
     }
-    button:hover {
+    #selectModal .confirm-btn:hover {
       background: #2980b9;
-    }
-
-    /* 响应式样式 */
-    @media screen and (max-width: 768px) {
-      .container {
-        width: 90%;
-        padding: 15px;
-      }
-      h1 {
-        font-size: 28px;
-      }
-      label, input, select, textarea, button {
-        font-size: 14px;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>开单</h1>
-    <form id="orderForm">
-      <div>
-        <label for="customerName">客户名称：</label>
-        <input type="text" id="customerName" name="customerName" placeholder="请输入客户名称" required>
-      </div>
-      <div>
-        <label for="orderDate">订单日期：</label>
-        <input type="date" id="orderDate" name="orderDate" required>
-      </div>
-      <div>
-        <label for="product">商品名称：</label>
-        <input type="text" id="product" name="product" placeholder="请输入商品名称" required>
-      </div>
-      <div>
-        <label for="quantity">数量：</label>
-        <input type="number" id="quantity" name="quantity" placeholder="请输入数量" required>
-      </div>
-      <div>
-        <label for="unitPrice">单价：</label>
-        <input type="number" id="unitPrice" name="unitPrice" placeholder="请输入单价" required>
-      </div>
-      <div>
-        <label for="remarks">备注：</label>
-        <textarea id="remarks" name="remarks" rows="4" placeholder="请输入备注信息"></textarea>
-      </div>
-      <button type="submit">提交订单</button>
-    </form>
+  <!-- 返回按钮，位于页面左上角 -->
+  <div style="margin-bottom: 10px;">
+    <a href="chuangkou1.html" style="display:inline-block; padding:8px 12px; background:#3498db; color:#fff; text-decoration:none; border-radius:5px;">
+      返回
+    </a>
   </div>
+
+  <!-- 主页面标题 -->
+  <h1>销售开单</h1>
+
+  <!-- Container 1 -->
+  <div class="container" id="container1">
+    <div class="row">
+      <label for="customerName">客户名称：</label>
+      <input type="text" id="customerName" placeholder="请输入客户名称">
+    </div>
+    <div class="row">
+      <label for="orderDate">开单日期：</label>
+      <input type="date" id="orderDate">
+    </div>
+    <!-- 两个独立 container，用于扫码商品和选择商品 -->
+    <div class="scan-choose-container">
+      <div class="scan-container" id="scanContainer">
+        <img src="saoma.jpg" alt="扫码商品">
+        <p>扫码商品</p>
+      </div>
+      <div class="scan-container" id="chooseContainer" onclick="openSelectModal()">
+        <img src="jiahao.jpg" alt="选择商品">
+        <p>选择商品</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container 2：已选择商品列表 -->
+  <div class="container" id="container2">
+    <div class="header">已选择商品</div>
+    <div class="product-list" id="productList">
+      <!-- 商品行将由 JS 动态添加 -->
+    </div>
+  </div>
+
+  <!-- Container 3：总计与备注 -->
+  <div class="container" id="container3">
+    <div class="summary">
+      <p>总数量：<span id="totalQty">0</span></p>
+      <p>总金额：<span id="totalAmount">￥0.00</span></p>
+    </div>
+    <div class="remarks">
+      <label for="remarks">备注：</label>
+      <textarea id="remarks" placeholder="请输入备注"></textarea>
+    </div>
+    <button id="submitOrder">开单</button>
+  </div>
+
+  <!-- 模态窗口：选择商品 -->
+  <div id="selectModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="modal-back-btn" onclick="closeSelectModal()">返回</button>
+        <h2>选择商品</h2>
+      </div>
+      <table id="selectTable">
+        <thead>
+          <tr>
+            <th>选择</th>
+            <th>序号</th>
+            <th>商品名称</th>
+            <th>规格</th>
+            <th>零售价格</th>
+            <th>库存</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 模拟产品数据 -->
+        </tbody>
+      </table>
+    </div>
+    <!-- 将确认选择按钮放在模态窗口框外 -->
+    <button class="confirm-btn" onclick="confirmSelection()">确认选择</button>
+  </div>
+
   <script>
-    // 模拟订单提交。实际项目中可用 AJAX 将数据提交给后台。
-    document.getElementById("orderForm").addEventListener("submit", function(e) {
-      e.preventDefault();
+    // 模拟用于选择商品的产品数据（实际可替换）
+    var selectProducts = [];
+    for (var i = 1; i <= 20; i++) {
+      selectProducts.push({
+        id: i,
+        name: "商品" + i,
+        spec: "规格" + i,
+        price: (10 + i).toFixed(2),
+        stock: Math.floor(Math.random() * 100)
+      });
+    }
+
+    // 填充模态窗口的表格
+    function populateSelectTable() {
+      var tbody = document.getElementById("selectTable").getElementsByTagName("tbody")[0];
+      tbody.innerHTML = "";
+      selectProducts.forEach(function(prod) {
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td><input type='checkbox' class='select-checkbox' data-id='" + prod.id + "'></td>" +
+          "<td>" + prod.id + "</td>" +
+          "<td>" + prod.name + "</td>" +
+          "<td>" + prod.spec + "</td>" +
+          "<td>" + prod.price + "</td>" +
+          "<td>" + prod.stock + "</td>";
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 打开模态窗口
+    function openSelectModal() {
+      populateSelectTable();
+      document.getElementById("selectModal").style.display = "flex";
+    }
+
+    // 关闭模态窗口
+    function closeSelectModal() {
+      document.getElementById("selectModal").style.display = "none";
+    }
+
+    // 确认选择：将选中的商品添加到已选择商品列表，并关闭模态窗口
+    function confirmSelection() {
+      var checkboxes = document.querySelectorAll(".select-checkbox");
+      checkboxes.forEach(function(chk) {
+        if (chk.checked) {
+          var prodId = chk.getAttribute("data-id");
+          var prod = selectProducts.find(p => p.id == prodId);
+          if (prod) {
+            addProductToList(prod);
+          }
+        }
+      });
+      closeSelectModal();
+      updateTotals();
+    }
+
+    // 添加商品到已选择商品列表，数量使用 input 可修改
+    function addProductToList(product) {
+      // 如果商品已存在，则忽略重复添加
+      var existing = document.querySelector("#productList [data-id='" + product.id + "']");
+      if (existing) return;
+
+      var productList = document.getElementById("productList");
+      var productRow = document.createElement("div");
+      productRow.className = "product-row";
+      productRow.setAttribute("data-id", product.id);
+      // 默认数量1，默认总价 = 单价
+      productRow.innerHTML =
+        "<div class='product-image'><img src='placeholder.jpg' alt='商品图片'></div>" +
+        "<div class='product-info'>" +
+          "<p class='product-name'>" + product.name + "</p>" +
+          "<p class='product-price'>单价：￥" + product.price + "</p>" +
+          "<p class='product-total'>总价：￥" + product.price + "</p>" +
+        "</div>" +
+        "<div class='product-qty-delete'>" +
+          "<input type='number' class='product-qty' value='1' min='1' onchange='updateProductTotal(this, " + product.price + ")'>" +
+          "<img src='shanchu.jpg' alt='删除' class='delete-icon' onclick='deleteProduct(this)'>" +
+        "</div>";
+      productList.appendChild(productRow);
+    }
+
+    // 更新商品行总价并刷新总体统计
+    function updateProductTotal(inputElem, unitPrice) {
+      var qty = parseFloat(inputElem.value) || 0;
+      var productRow = inputElem.closest(".product-row");
+      var totalElem = productRow.querySelector(".product-total");
+      var total = unitPrice * qty;
+      totalElem.textContent = "总价：￥" + total.toFixed(2);
+      updateTotals();
+    }
+
+    // 更新已选择商品总数量与总金额
+    function updateTotals() {
+      let totalQty = 0;
+      let totalAmount = 0;
+      let productRows = document.querySelectorAll("#container2 .product-row");
+      productRows.forEach(function(row) {
+        let qtyInput = row.querySelector(".product-qty");
+        let qty = parseFloat(qtyInput.value) || 0;
+        totalQty += qty;
+        let totalText = row.querySelector(".product-total").textContent;
+        let amount = parseFloat(totalText.replace(/[^0-9\.]/g, '')) || 0;
+        totalAmount += amount;
+      });
+      document.getElementById("totalQty").textContent = totalQty;
+      document.getElementById("totalAmount").textContent = "￥" + totalAmount.toFixed(2);
+    }
+
+    // 删除商品行并更新统计
+    function deleteProduct(deleteIcon) {
+      var productRow = deleteIcon.parentElement.parentElement;
+      productRow.parentElement.removeChild(productRow);
+      updateTotals();
+      alert("已删除该商品");
+    }
+
+    // 开单按钮事件
+    document.getElementById("submitOrder").addEventListener("click", function() {
       alert("订单已提交！");
     });
   </script>
