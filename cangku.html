@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>库存查看管理器</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    /* 艺术字标题 */
+    .artistic-header {
+      text-align: center;
+      font-size: 40px;
+      font-weight: bold;
+      background: linear-gradient(45deg, #ff6b6b, #fbc531, #4cd137);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+    }
+    /* 功能按钮区域（电脑端） */
+    .functionality-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 33vh; /* 占整个页面高度的1/3 */
+      gap: 40px;   /* 按钮间距 */
+    }
+    .functionality-container button {
+      padding: 20px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #3498db;
+      color: #fff;
+      transition: background 0.3s;
+    }
+    .functionality-container button:hover {
+      background: #2980b9;
+    }
+    /* 响应式样式：屏幕宽度小于768px时 */
+    @media screen and (max-width: 768px) {
+      .functionality-container {
+        flex-direction: column;
+        height: auto;
+        gap: 20px;
+      }
+      .functionality-container button {
+        padding: 15px 20px;
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 <body>
-
+  <!-- 艺术字标题 -->
+  <h1 class="artistic-header">刘总的超级无敌牛逼的库存查看管理器</h1>
+  <!-- 功能按钮区域 -->
+  <div class="functionality-container">
+    <button onclick="location.href='order_view.html'">查看订单</button>
+    <button onclick="location.href='kc total.html'">库存管理</button>
+    <button onclick="location.href='other.html'">其他选项</button>
+  </div>
 </body>
 </html>
